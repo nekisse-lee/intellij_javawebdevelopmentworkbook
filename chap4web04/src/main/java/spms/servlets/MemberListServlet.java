@@ -22,7 +22,7 @@ public class MemberListServlet extends GenericServlet {
         try {
             //1. 사용할 JDBC드라이버를 등록하라.
 
-            Class.forName("com.mysql.jdbc.Driver");
+            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
             //2. 드라이버를 사용하여 MySQL 서버와 연결.
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/studydb"
                     , "root"
@@ -36,8 +36,9 @@ public class MemberListServlet extends GenericServlet {
             servletResponse.setContentType("text/html; charset=UTF-8");
 
             PrintWriter out = servletResponse.getWriter();
-            out.println("<html><head><title>회원목록</title></head>");
-            out.println("<body><h1>회원목록</h1>");
+            out.println("<html><head><title>회원목록</title></head><body>");
+            out.println("<h1> 회원 목록 </h1>");
+            out.println("<p><a href ='add'> 신규회원 </a></p> ");
             while(rs.next()) {
                 out.println(
                         rs.getInt("MNO") + "," +
@@ -49,8 +50,6 @@ public class MemberListServlet extends GenericServlet {
             out.println("</body></html>");
         } catch (SQLException e) {
             throw new ServletException(e);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } finally {
             try{rs.close();}catch (Exception e){}
             try{stmt.close();}catch (Exception e){}
