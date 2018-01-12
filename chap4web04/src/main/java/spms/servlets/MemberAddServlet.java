@@ -14,7 +14,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
 @SuppressWarnings("serial")
-@WebServlet("/member/add")
+//@WebServlet("/member/add")
 public class MemberAddServlet extends HttpServlet {
 
     @Override
@@ -23,7 +23,7 @@ public class MemberAddServlet extends HttpServlet {
         resp.setContentType("text/html; charset=UTF-8");
         PrintWriter out = resp.getWriter();
 
-        out.println("<html><head><title>회원 등록</title></head>");
+        out.println("<html><head><title>회원 등록2222</title></head>");
         out.println("<body><h1>회원 등록</h1>");
         out.println("<form action='add' method='post'>");
         out.println("이름: <input type='text' name='name'><br>");
@@ -44,11 +44,14 @@ public class MemberAddServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
 
         try {
-            DriverManager.registerDriver(new Driver());
+//            DriverManager.registerDriver(new Driver());
+            Class.forName(this.getInitParameter("driver"));
+
+
             conn = DriverManager.getConnection(
-                    "jdbc:mysql://localhost:3306/studydb", //JDBC URL
-                    "root",	// DBMS 사용자 아이디
-                    "dltjsgh");	// DBMS 사용자 암호
+                    this.getInitParameter("url"), //JDBC URL
+                    this.getInitParameter("username"),	// DBMS 사용자 아이디
+                    this.getInitParameter("password"));	// DBMS 사용자 암호
             stmt = conn.prepareStatement(
                     "INSERT INTO MEMBERS(EMAIL,PWD,MNAME,CRE_DATE,MOD_DATE)"
                             + " VALUES (?,?,?,NOW(),NOW())");
@@ -56,6 +59,8 @@ public class MemberAddServlet extends HttpServlet {
             stmt.setString(2, req.getParameter("password"));
             stmt.setString(3, req.getParameter("name"));
             stmt.executeUpdate();
+
+            resp.sendRedirect("list");
 
             resp.setContentType("text/html; charset=UTF-8");
             PrintWriter out = resp.getWriter();
