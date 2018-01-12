@@ -1,16 +1,19 @@
-package spms.servlets;
+package spms.servlet;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.*;
 
 
-//@WebServlet("/member/list")
-public class MemberListServlet extends GenericServlet {
+@WebServlet("/member/list")
+public class MemberListServlet extends HttpServlet {
     @Override
-    public void service(ServletRequest servletRequest, ServletResponse servletResponse)
+    public void doGet(HttpServletRequest servletRequest, HttpServletResponse servletResponse)
             throws ServletException, IOException {
         Connection con = null;
         Statement stmt = null;
@@ -24,13 +27,16 @@ public class MemberListServlet extends GenericServlet {
             //Class.forName(config.getInitParameter("driver"));
             // GenericServlet 가 이미 ServlitConfig를 구현..
 
-            Class.forName(this.getInitParameter("driver"));
+            //Class.forName(this.getInitParameter("driver"));
 
-            //2. 드라이버를 사용하여 MySQL 서버와 연결.
+            ServletContext ctx = this.getServletContext();
+            Class.forName(ctx.getInitParameter("driver"));
+
+            // 드라이버를 사용하여 MySQL 서버와 연결.
             con = DriverManager.getConnection(
-                    this.getInitParameter("url")
-                    ,this.getInitParameter("username")
-                    , this.getInitParameter("password"));
+                    ctx.getInitParameter("url"),
+                    ctx.getInitParameter("username"),
+                    ctx.getInitParameter("password"));
 
             //3. 커넥션 객체로부터 SQL을 던질  객체를 준비. Statement
             stmt = con.createStatement();

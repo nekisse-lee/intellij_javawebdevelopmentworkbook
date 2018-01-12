@@ -1,7 +1,8 @@
-package spms.servlets;
+package spms.servlet;
 
 import com.mysql.jdbc.Driver;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,13 +15,14 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
 @SuppressWarnings("serial")
-//@WebServlet("/member/add")
+@WebServlet("/member/add")
 public class MemberAddServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        resp.setContentType("text/html; charset=UTF-8");
+         resp.setContentType("text/html; charset=UTF-8");
+
         PrintWriter out = resp.getWriter();
 
         out.println("<html><head><title>회원 등록2222</title></head>");
@@ -39,19 +41,21 @@ public class MemberAddServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
+//        req.setCharacterEncoding("UTF-8");
+
         Connection conn = null;
         PreparedStatement stmt = null;
-        req.setCharacterEncoding("UTF-8");
 
         try {
 //            DriverManager.registerDriver(new Driver());
-            Class.forName(this.getInitParameter("driver"));
+            ServletContext ctx = this.getServletContext();
+            Class.forName(ctx.getInitParameter("driver"));
 
-
+            //2. 드라이버를 사용하여 MySQL 서버와 연결.
             conn = DriverManager.getConnection(
-                    this.getInitParameter("url"), //JDBC URL
-                    this.getInitParameter("username"),	// DBMS 사용자 아이디
-                    this.getInitParameter("password"));	// DBMS 사용자 암호
+                    ctx.getInitParameter("url"),
+                    ctx.getInitParameter("username"),
+                    ctx.getInitParameter("password"));
             stmt = conn.prepareStatement(
                     "INSERT INTO MEMBERS(EMAIL,PWD,MNAME,CRE_DATE,MOD_DATE)"
                             + " VALUES (?,?,?,NOW(),NOW())");
