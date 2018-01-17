@@ -1,45 +1,40 @@
 package spms.servlets;
 
-import spms.dao.MemberDao;
+import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.Statement;
 
+import spms.dao.MemberDao;
+
+// ServletContext에 보관된 MemberDao 사용하기
 @WebServlet("/member/delete")
 public class MemberDeleteServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+    public void doGet(
+            HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Connection conn = null;
-        Statement stmt = null;
-
-
         try {
             ServletContext sc = this.getServletContext();
-            conn = (Connection) sc.getAttribute("conn");
-            MemberDao memberDao = (MemberDao) sc.getAttribute("memberDao");
+            MemberDao memberDao = (MemberDao)sc.getAttribute("memberDao");
 
-            memberDao.delete(Integer.parseInt(req.getParameter("no")));
+            memberDao.delete(Integer.parseInt(request.getParameter("no")));
 
-            resp.sendRedirect("list");
-
+            response.sendRedirect("list");
 
         } catch (Exception e) {
             e.printStackTrace();
-            req.setAttribute("error", e);
-            RequestDispatcher rd = req.getRequestDispatcher("/Error.jsp");
-            rd.forward(req, resp);
+            request.setAttribute("error", e);
+            RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
+            rd.forward(request, response);
+
         }
     }
 }

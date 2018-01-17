@@ -3,10 +3,12 @@ package spms.servlets;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpServlet;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
+@WebListener
 public class AppInitServlet extends HttpServlet {
 
     @Override
