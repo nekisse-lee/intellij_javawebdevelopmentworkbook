@@ -6,7 +6,8 @@
          id="WebApp_ID" version="3.0">
     <display-name>web05</display-name>
 
-    <!-- 컨텍스트 초기화 파라미터 -->
+
+    <!--톰캣 context.xml에서 데이터 소스 사용-->
     <resource-ref>
         <res-ref-name>jdbc/studydb</res-ref-name>
         <res-type>javax.sql.DataSource</res-type>
@@ -16,7 +17,7 @@
 
 
 
-
+    <!-- 컨텍스트 초기화 파라미터 -->
     <context-param>
         <param-name>driver</param-name>
         <param-value>com.mysql.jdbc.Driver</param-value>

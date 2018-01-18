@@ -29,16 +29,17 @@ public class MemberUpdateServlet extends HttpServlet {
                     Integer.parseInt(request.getParameter("no")));
 
             request.setAttribute("member", member);
-
-            RequestDispatcher rd = request.getRequestDispatcher(
-                    "/member/MemberUpdateForm.jsp");
-            rd.forward(request, response);
+            request.setAttribute("viewUrl","/member/MemberUpdateForm.jsp");
+//            RequestDispatcher rd = request.getRequestDispatcher(
+//                    "/member/MemberUpdateForm.jsp");
+//            rd.forward(request, response);
 
         } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("error", e);
-            RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
-            rd.forward(request, response);
+            throw new ServletException(e);
+//            e.printStackTrace();
+//            request.setAttribute("error", e);
+//            RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
+//            rd.forward(request, response);
         }
     }
 
@@ -49,19 +50,23 @@ public class MemberUpdateServlet extends HttpServlet {
         try {
             ServletContext sc = this.getServletContext();
             MemberDao memberDao = (MemberDao) sc.getAttribute("memberDao");
+            Member member = (Member) request.getAttribute("member");
 
-            memberDao.update(new Member()
-                    .setNo(Integer.parseInt(request.getParameter("no")))
-                    .setName(request.getParameter("name"))
-                    .setEmail(request.getParameter("email")));
-
-            response.sendRedirect("list");
+            memberDao.update(member);
+            request.setAttribute("viewUrl", "redirect:list.do");
+//            memberDao.update(new Member()
+//                    .setNo(Integer.parseInt(request.getParameter("no")))
+//                    .setName(request.getParameter("name"))
+//                    .setEmail(request.getParameter("email")));
+//
+//            response.sendRedirect("list");
 
         } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("error", e);
-            RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
-            rd.forward(request, response);
+            throw new ServletException(e);
+//            e.printStackTrace();
+//            request.setAttribute("error", e);
+//            RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
+//            rd.forward(request, response);
         }
     }
 }

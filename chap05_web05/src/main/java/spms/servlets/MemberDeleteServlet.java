@@ -26,14 +26,15 @@ public class MemberDeleteServlet extends HttpServlet {
             MemberDao memberDao = (MemberDao)sc.getAttribute("memberDao");
 
             memberDao.delete(Integer.parseInt(request.getParameter("no")));
-
-            response.sendRedirect("list");
+            request.setAttribute("viewUrl", "redirect:list.do");
+//            response.sendRedirect("list");
 
         } catch (Exception e) {
-            e.printStackTrace();
-            request.setAttribute("error", e);
-            RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
-            rd.forward(request, response);
+            throw new ServletException(e);
+//            e.printStackTrace();
+//            request.setAttribute("error", e);
+//            RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
+//            rd.forward(request, response);
 
         }
     }
