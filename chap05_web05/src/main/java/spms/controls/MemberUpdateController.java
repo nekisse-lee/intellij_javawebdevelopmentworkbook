@@ -2,15 +2,15 @@ package spms.controls;
 
 import java.util.Map;
 
-import spms.dao.MemberDao;
+import spms.dao.MySqlMemberDao;
 import spms.vo.Member;
 
 // 의존 객체 주입을 위해 인스턴스 변수와 셋터 메서드 추가
 //- 또한 의존 객체를 꺼내는 기존 코드 변경
 public class MemberUpdateController implements Controller {
-    MemberDao memberDao;
+    MySqlMemberDao memberDao;
 
-    public MemberUpdateController setMemberDao(MemberDao memberDao) {
+    public MemberUpdateController setMemberDao(MySqlMemberDao memberDao) {
         this.memberDao = memberDao;
         return this;
     }

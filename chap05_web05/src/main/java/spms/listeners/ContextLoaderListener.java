@@ -1,9 +1,7 @@
 package spms.listeners;
 
-import org.apache.commons.dbcp.BasicDataSource;
 import spms.controls.*;
-import spms.dao.MemberDao;
-import spms.util.DBConnectionPoll;
+import spms.dao.MySqlMemberDao;
 
 import javax.naming.InitialContext;
 import javax.servlet.ServletContext;
@@ -11,7 +9,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import javax.sql.DataSource;
-import java.sql.SQLException;
 
 //import javax.servlet.annotation.WebListener;
 
@@ -34,9 +31,10 @@ public class ContextLoaderListener implements ServletContextListener {
             InitialContext initialContext = new InitialContext();
             DataSource ds = (DataSource) initialContext.lookup("java:comp/env/jdbc/studydb");
 
-            MemberDao memberDao = new MemberDao();
-            memberDao.setDataSource(ds);
+//            MySqlMemberDao memberDao = new MySqlMemberDao();
+//            memberDao.setDataSource(ds);
 
+            MySqlMemberDao memberDao = new MySqlMemberDao();
 //            sc.setAttribute("memberDao", memberDao);
             sc.setAttribute("/auth/login.do",
                     new LogInController().setMemberDao(memberDao));

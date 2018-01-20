@@ -1,13 +1,13 @@
 package spms.controls;
 
-import spms.dao.MemberDao;
+import spms.dao.MySqlMemberDao;
 
 import java.util.Map;
 
 public class MemberDeleteController implements Controller {
-    MemberDao memberDao;
+    MySqlMemberDao memberDao;
 
-    public MemberDeleteController setMemberDao(MemberDao memberDao) {
+    public MemberDeleteController setMemberDao(MySqlMemberDao memberDao) {
         this.memberDao = memberDao;
         return this;
     }
