@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import com.sun.xml.internal.ws.api.databinding.Databinding;
 import spms.bind.DataBinding;
 import spms.bind.ServletRequestDataBinder;
+import spms.context.ApplicationContext;
 import spms.controls.Controller;
+import spms.listeners.ContextLoaderListener;
 import spms.vo.Member;
 
 // ServletContext에 보관된 페이지 컨트롤러를 사용
@@ -28,13 +30,19 @@ public class DispatcherServlet extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
         String servletPath = request.getServletPath();
         try {
-            ServletContext sc = this.getServletContext();
+//            ServletContext sc = this.getServletContext();
+            ApplicationContext ctx = ContextLoaderListener.getApplicationContext();
 
             // 페이지 컨트롤러에게 전달할 Map 객체를 준비한다.
             HashMap<String,Object> model = new HashMap<String,Object>();
             model.put("session", request.getSession());
 
-            Controller pageController = (Controller) sc.getAttribute(servletPath);
+//            Controller pageController = (Controller) sc.getAttribute(servletPath);
+            Controller pageController = (Controller) ctx.getBean(servletPath);
+            if (pageController == null) {
+                throw new Exception("요청한 서비스를 찾을 수 없습니다.");
+            }
+
 
             if (pageController instanceof DataBinding) {
                 prepareRequestData(request, model, (DataBinding)pageController);
