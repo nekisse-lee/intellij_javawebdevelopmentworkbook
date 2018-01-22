@@ -1,4 +1,4 @@
-package spms.servlets;
+package spms.test;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;

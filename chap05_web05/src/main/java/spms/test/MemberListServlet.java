@@ -1,4 +1,4 @@
-package spms.servlets;
+package spms.test;
 
 import java.io.IOException;
 

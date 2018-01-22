@@ -1,4 +1,4 @@
-package spms.servlets;
+package spms.test;
 
 import java.io.IOException;
 
@@ -10,40 +10,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import spms.dao.MySqlMemberDao;
-import spms.vo.Member;
 
 // ServletContext에 보관된 MySqlMemberDao 사용하기
-@WebServlet("/member/add")
-public class MemberAddServlet extends HttpServlet {
+@WebServlet("/member/delete")
+public class MemberDeleteServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
 
     @Override
-    protected void doGet(
-            HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        request.setAttribute("viewUrl","/member/MemberForm.jsp");
-//        RequestDispatcher rd = request.getRequestDispatcher(
-//                "/member/MemberForm.jsp");
-//        rd.forward(request, response);
-    }
-
-    @Override
-    protected void doPost(
+    public void doGet(
             HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
             ServletContext sc = this.getServletContext();
             MySqlMemberDao memberDao = (MySqlMemberDao)sc.getAttribute("memberDao");
 
-            Member member = (Member) request.getAttribute("member");
-            memberDao.insert(member);
-
-            request.setAttribute("viewUrl","redirect:list.do");
-
-//            memberDao.insert(new Member()
-//                    .setEmail(request.getParameter("email"))
-//                    .setPassword(request.getParameter("password"))
-//                    .setName(request.getParameter("name")));
-//
+            memberDao.delete(Integer.parseInt(request.getParameter("no")));
+            request.setAttribute("viewUrl", "redirect:list.do");
 //            response.sendRedirect("list");
 
         } catch (Exception e) {
@@ -52,6 +34,7 @@ public class MemberAddServlet extends HttpServlet {
 //            request.setAttribute("error", e);
 //            RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
 //            rd.forward(request, response);
+
         }
     }
 }

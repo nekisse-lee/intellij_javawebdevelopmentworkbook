@@ -1,4 +1,4 @@
-package spms.servlets;
+package spms.test;
 
 import java.io.IOException;
 
@@ -8,23 +8,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import spms.dao.MySqlMemberDao;
 import spms.vo.Member;
 
 // ServletContext에 보관된 MySqlMemberDao 사용하기
-@WebServlet("/auth/login")
-public class LogInServlet extends HttpServlet {
-    private static final long serialVersionUID = 1L;
+@WebServlet("/member/add")
+public class MemberAddServlet extends HttpServlet {
 
     @Override
     protected void doGet(
             HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setAttribute("viewUrl", "/auth/LogInForm.jsp");
+        request.setAttribute("viewUrl","/member/MemberForm.jsp");
 //        RequestDispatcher rd = request.getRequestDispatcher(
-//                "/auth/LogInForm.jsp");
+//                "/member/MemberForm.jsp");
 //        rd.forward(request, response);
     }
 
@@ -35,24 +33,25 @@ public class LogInServlet extends HttpServlet {
         try {
             ServletContext sc = this.getServletContext();
             MySqlMemberDao memberDao = (MySqlMemberDao)sc.getAttribute("memberDao");
-            Member member = memberDao.exist(
-                    request.getParameter("email"),
-                    request.getParameter("password"));
-            if (member != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("member", member);
-                request.setAttribute("viewUrl", "redirect:../member/list.do");
-//                response.sendRedirect("../member/list");
 
-            } else {
-                request.setAttribute("viewUrl", "/auth/LogInFail.jsp");
-//                RequestDispatcher rd = request.getRequestDispatcher(
-//                        "/auth/LogInFail.jsp");
-//                rd.forward(request, response);
-            }
+            Member member = (Member) request.getAttribute("member");
+            memberDao.insert(member);
+
+            request.setAttribute("viewUrl","redirect:list.do");
+
+//            memberDao.insert(new Member()
+//                    .setEmail(request.getParameter("email"))
+//                    .setPassword(request.getParameter("password"))
+//                    .setName(request.getParameter("name")));
+//
+//            response.sendRedirect("list");
+
         } catch (Exception e) {
             throw new ServletException(e);
-
+//            e.printStackTrace();
+//            request.setAttribute("error", e);
+//            RequestDispatcher rd = request.getRequestDispatcher("/Error.jsp");
+//            rd.forward(request, response);
         }
     }
 }
