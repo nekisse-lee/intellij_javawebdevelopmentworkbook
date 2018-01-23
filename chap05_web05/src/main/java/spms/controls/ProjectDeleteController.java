@@ -2,15 +2,17 @@ package spms.controls;
 
 import spms.annotation.Component;
 import spms.bind.DataBinding;
-import spms.dao.MySqlMemberDao;
+import spms.dao.ProjectDao;
 
+import java.sql.Connection;
 import java.util.Map;
-@Component("/member/delete.do")
-public class MemberDeleteController implements Controller, DataBinding {
-    MySqlMemberDao memberDao;
 
-    public MemberDeleteController setMemberDao(MySqlMemberDao memberDao) {
-        this.memberDao = memberDao;
+@Component("/project/delete.do")
+public class ProjectDeleteController implements Controller, DataBinding{
+    ProjectDao projectDao;
+
+    public ProjectDeleteController setProjectDao(ProjectDao projectDao) {
+        this.projectDao = projectDao;
         return this;
     }
 
@@ -24,8 +26,7 @@ public class MemberDeleteController implements Controller, DataBinding {
     @Override
     public String execute(Map<String, Object> model) throws Exception {
         Integer no = (Integer) model.get("no");
-        memberDao.delete(no);
-
-        return "redirect:list.do";
+        projectDao.delete(no);
+        return null;
     }
 }

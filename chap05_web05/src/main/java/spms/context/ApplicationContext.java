@@ -1,15 +1,21 @@
 package spms.context;
 
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import java.io.FileReader;
 import java.lang.reflect.Method;
 import java.util.Hashtable;
 import java.util.Properties;
+import java.util.Set;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+
+import org.reflections.Reflections;
+
+import spms.annotation.Component;
+
+// 프로퍼티 파일 및 애노테이션을 이용한 객체 준비
 public class ApplicationContext {
-
-    Hashtable<String, Object> objTable = new Hashtable<String, Object>();
+    Hashtable<String,Object> objTable = new Hashtable<String,Object>();
 
     public Object getBean(String key) {
         return objTable.get(key);
@@ -20,7 +26,20 @@ public class ApplicationContext {
         props.load(new FileReader(propertiesPath));
 
         prepareObjects(props);
+        prepareAnnotationObjects();
         injectDependency();
+    }
+
+    private void prepareAnnotationObjects()
+            throws Exception{
+        Reflections reflector = new Reflections("");
+
+        Set<Class<?>> list = reflector.getTypesAnnotatedWith(Component.class);
+        String key = null;
+        for(Class<?> clazz : list) {
+            key = clazz.getAnnotation(Component.class).value();
+            objTable.put(key, clazz.newInstance());
+        }
     }
 
     private void prepareObjects(Properties props) throws Exception {
@@ -29,9 +48,8 @@ public class ApplicationContext {
         String value = null;
 
         for (Object item : props.keySet()) {
-            key = (String) item;
+            key = (String)item;
             value = props.getProperty(key);
-
             if (key.startsWith("jndi.")) {
                 objTable.put(key, ctx.lookup(value));
             } else {
@@ -68,6 +86,4 @@ public class ApplicationContext {
         }
         return null;
     }
-
-
 }

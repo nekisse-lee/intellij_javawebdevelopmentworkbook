@@ -1,5 +1,6 @@
 package spms.dao;
 
+// 애노테이션 적용
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -7,22 +8,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import spms.util.DBConnectionPoll;
-import spms.vo.Member;
-
 import javax.sql.DataSource;
 
-public class MySqlMemberDao implements MemberDao{
-//    Connection connection;
-//
-//    public void setConnection(Connection connection) {
-//        this.connection = connection;
-//    }
-//    DBConnectionPoll connPoll;
-//
-//    public void setDbConnPoll(DBConnectionPoll connPoll) {
-//        this.connPoll = connPoll;
-//    }
+import spms.annotation.Component;
+import spms.vo.Member;
+
+@Component("memberDao")
+public class MySqlMemberDao implements MemberDao {
     DataSource ds;
 
     public void setDataSource(DataSource ds) {
@@ -36,7 +28,6 @@ public class MySqlMemberDao implements MemberDao{
 
         try {
             connection = ds.getConnection();
-//            connection = connPoll.getConnecion();
             stmt = connection.createStatement();
             rs = stmt.executeQuery(
                     "SELECT MNO,MNAME,EMAIL,CRE_DATE" +
@@ -61,8 +52,7 @@ public class MySqlMemberDao implements MemberDao{
         } finally {
             try {if (rs != null) rs.close();} catch(Exception e) {}
             try {if (stmt != null) stmt.close();} catch(Exception e) {}
-//            if (connection != null)connPoll.returnConnection(connection);
-            try{if (connection != null) connection.close();}catch (Exception e){}
+            try {if (connection != null) connection.close();} catch(Exception e) {}
         }
     }
 
@@ -71,7 +61,6 @@ public class MySqlMemberDao implements MemberDao{
         PreparedStatement stmt = null;
 
         try {
-//            connection = connPoll.getConnecion();
             connection = ds.getConnection();
             stmt = connection.prepareStatement(
                     "INSERT INTO MEMBERS(EMAIL,PWD,MNAME,CRE_DATE,MOD_DATE)"
@@ -86,8 +75,7 @@ public class MySqlMemberDao implements MemberDao{
 
         } finally {
             try {if (stmt != null) stmt.close();} catch(Exception e) {}
-//            if (connection != null)connPoll.returnConnection(connection);
-            try{if (connection != null) connection.close();}catch (Exception e){}
+            try {if (connection != null) connection.close();} catch(Exception e) {}
         }
     }
 
@@ -96,7 +84,6 @@ public class MySqlMemberDao implements MemberDao{
         Statement stmt = null;
 
         try {
-//            connection = connPoll.getConnecion();
             connection = ds.getConnection();
             stmt = connection.createStatement();
             return stmt.executeUpdate(
@@ -107,9 +94,7 @@ public class MySqlMemberDao implements MemberDao{
 
         } finally {
             try {if (stmt != null) stmt.close();} catch(Exception e) {}
-//            if (connection != null) connPoll.returnConnection(connection);
-            try{if (connection != null) connection.close();}catch (Exception e){}
-
+            try {if (connection != null) connection.close();} catch(Exception e) {}
         }
     }
 
@@ -118,7 +103,6 @@ public class MySqlMemberDao implements MemberDao{
         Statement stmt = null;
         ResultSet rs = null;
         try {
-//            connection = connPoll.getConnecion();
             connection = ds.getConnection();
             stmt = connection.createStatement();
             rs = stmt.executeQuery(
@@ -140,9 +124,7 @@ public class MySqlMemberDao implements MemberDao{
         } finally {
             try {if (rs != null) rs.close();} catch(Exception e) {}
             try {if (stmt != null) stmt.close();} catch(Exception e) {}
-//            if (connection != null)connPoll.returnConnection(connection);
-            try{if (connection != null) connection.close();}catch (Exception e){}
-
+            try {if (connection != null) connection.close();} catch(Exception e) {}
         }
     }
 
@@ -150,7 +132,6 @@ public class MySqlMemberDao implements MemberDao{
         Connection connection = null;
         PreparedStatement stmt = null;
         try {
-//            connection = connPoll.getConnecion();
             connection = ds.getConnection();
             stmt = connection.prepareStatement(
                     "UPDATE MEMBERS SET EMAIL=?,MNAME=?,MOD_DATE=now()"
@@ -165,9 +146,7 @@ public class MySqlMemberDao implements MemberDao{
 
         } finally {
             try {if (stmt != null) stmt.close();} catch(Exception e) {}
-//            if (connection != null) connPoll.returnConnection(connection);
-            try{if (connection != null) connection.close();}catch (Exception e){}
-
+            try {if (connection != null) connection.close();} catch(Exception e) {}
         }
     }
 
@@ -177,7 +156,6 @@ public class MySqlMemberDao implements MemberDao{
         ResultSet rs = null;
 
         try {
-//            connection = connPoll.getConnecion();
             connection = ds.getConnection();
             stmt = connection.prepareStatement(
                     "SELECT MNAME,EMAIL FROM MEMBERS"
@@ -198,8 +176,7 @@ public class MySqlMemberDao implements MemberDao{
         } finally {
             try {if (rs != null) rs.close();} catch (Exception e) {}
             try {if (stmt != null) stmt.close();} catch (Exception e) {}
-//            if (connection != null)connPoll.returnConnection(connection);
-
+            try {if (connection != null) connection.close();} catch(Exception e) {}
         }
     }
 
